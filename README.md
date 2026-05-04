@@ -115,3 +115,46 @@ See the `examples/` directory:
 - `simple_usage.py` — Function interface quickstart
 - `subgraph_usage.py` — Embedding in a parent LangGraph
 - `sample_task.txt` + `sample_report.md` — Sample input data
+
+
+## Review Report 說明:
+review_output.json 結構與 feedback 來源                                                                                                                                                                                                                                                                                                                                                           
+  review_output.json                                                                                                                                                                                ├── review_metadata          ← 元資料（不是 feedback）    
+  ├── human_summary            ← 摘要（不是 feedback，是總覽）
+  ├── human_readable_text      ← 純文字版（給人看）
+  ├── dimension_reviews        ← ⭐ 主要 feedback 來源
+  │   ├── question_alignment.top_feedback[]    ← agent 要處理
+  │   ├── information_recall.top_feedback[]    ← agent 要處理
+  │   ├── completeness.top_feedback[]          ← agent 要處理
+  │   ├── logical_coherence.top_feedback[]     ← agent 要處理
+  │   ├── source_quality.top_feedback[]        ← agent 要處理
+  │   └── presentation_specificity.top_feedback[] ← agent 要處理
+  ├── additional_observations  ← ❌ nice_to_fix，agent 應過濾掉
+  └── v2_interface             ← 預留欄位（忽略）
+
+  Agent 要當 feedback 處理的
+
+  dimension_reviews.*.top_feedback[] — 每條包含：
+
+  ┌────────────────────┬─────────────────────────┬───────────────────────────────────────────────────────┐
+  │        欄位        │          用途           │                         範例                          │
+  ├────────────────────┼─────────────────────────┼───────────────────────────────────────────────────────┤
+  │ id                 │ 唯一識別                │ LC-001                                                │
+  ├────────────────────┼─────────────────────────┼───────────────────────────────────────────────────────┤
+  │ severity           │ 優先順序                │ must_fix > should_fix                                 │
+  ├────────────────────┼─────────────────────────┼───────────────────────────────────────────────────────┤
+  │ one_liner          │ 一句話問題描述          │ "0%幻覺說法與57%後理性引用衝突"                       │
+  ├────────────────────┼─────────────────────────┼───────────────────────────────────────────────────────┤
+  │ detail             │ 詳細說明                │ 2-4 句                                                │
+  ├────────────────────┼─────────────────────────┼───────────────────────────────────────────────────────┤
+  │ evidence_in_report │ 報告中的原文依據        │ 定位修改位置用                                        │
+  ├────────────────────┼─────────────────────────┼───────────────────────────────────────────────────────┤
+  │ fix_type           │ 告訴 agent 要做什麼動作 │ search_more / rewrite_section / add_perspective / ... │
+  ├────────────────────┼─────────────────────────┼───────────────────────────────────────────────────────┤
+  │ fix_target         │ 改哪裡                  │ "第 4 章結論段"                                       │
+  ├────────────────────┼─────────────────────────┼───────────────────────────────────────────────────────┤
+  │ fix_hint           │ 怎麼改                  │ "補充具體數據佐證"                                    │
+  ├────────────────────┼─────────────────────────┼───────────────────────────────────────────────────────┤
+  │ confidence         │ 可信度                  │ 0.0-1.0                                               │
+  └────────────────────┴─────────────────────────┴───────────────────────────────────────────────────────┘
+
