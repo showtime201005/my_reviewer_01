@@ -83,8 +83,8 @@ This file provides guidance to Claude Code when working on this project.
 
 ## 環境變數
 
-- `OPENAI_API_KEY` — 必填
-- `OPENAI_MODEL` — 預設 `gpt-4o`，可覆寫
+- `OPENROUTER_API_KEY` — 必填（OpenRouter API key）
+- `OPENROUTER_MODEL` — 預設 `openai/gpt-4o`，可覆寫
 
 ## Commit 訊息
 
